@@ -69,7 +69,7 @@ const AgentsManager: React.FC = () => {
     return (
         <div className="agents-container">
             <div className="agents-header">
-                <h1>Agentes Especialistas</h1>
+                <h1>Especialistas RAG</h1>
                 <button className="btn-create-agent" onClick={() => setIsModalOpen(true)}>
                     + Novo Especialista
                 </button>

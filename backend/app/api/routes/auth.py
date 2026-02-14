@@ -16,7 +16,7 @@ from app.services.auth_service import (
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from app.models.database import User, ApiKey
-from app.modules.user_intelligence.models.models import UserProfile
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -67,8 +67,7 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
             db=db,
             email=user_data.email,
             username=user_data.username,
-            native_language=user_data.native_language,
-            learning_language=user_data.learning_language
+            password=user_data.password
         )
         
         # Cria token de acesso
@@ -109,8 +108,8 @@ async def login(
     user_data: UserLogin,
     db: Session = Depends(get_db)
 ):
-    """Login do usuário (apenas por email, sem senha)"""
-    user = authenticate_user(db, user_data.email)
+    """Login do usuário com email e senha (MVP, sem criptografia)"""
+    user = authenticate_user(db, user_data.email, user_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -138,26 +137,11 @@ async def get_current_user_profile(
     db: Session = Depends(get_db)
 ):
     """Retorna perfil do usuário atual"""
-    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-    if not profile:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Perfil não encontrado"
-        )
-    
+    # Adaptação sem tabela de Profile extra
     return UserProfileResponse(
         id=current_user.id,
         email=current_user.email,
         username=current_user.username,
-        native_language=profile.native_language,
-        learning_language=profile.learning_language,
-        proficiency_level=profile.proficiency_level,
-        total_chat_messages=profile.total_chat_messages,
-        total_practice_sessions=profile.total_practice_sessions,
-        average_response_time=profile.average_response_time,
-        learning_context=profile.learning_context,
-        preferred_learning_style=profile.preferred_learning_style,
-        preferred_model=profile.preferred_model,
-        model_preferences=profile.model_preferences,
+        # Campos de idioma com defaults ou removidos do schema
         created_at=current_user.created_at
     )

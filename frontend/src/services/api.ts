@@ -40,204 +40,7 @@ api.interceptors.response.use(
   }
 );
 
-export interface VideoProcessRequest {
-  youtube_url: string;
-  source_language: string;
-  target_language: string;
-  gemini_api_key?: string | null;
-  force_retranslate?: boolean;
-}
-
-export interface VideoProcessResponse {
-  job_id: string;
-  status: string;
-  message: string;
-}
-
-export interface JobStatusResponse {
-  job_id: string;
-  status: 'queued' | 'processing' | 'completed' | 'error';
-  progress: number;
-  message: string | null;
-  video_id: string | null;
-  error: string | null;
-  translation_service: string | null;
-}
-
-export interface TranslationSegment {
-  start: number;
-  duration: number;
-  original: string;
-  translated: string;
-}
-
-export interface SubtitlesResponse {
-  video_id: string;
-  source_language: string;
-  target_language: string;
-  segments: TranslationSegment[];
-}
-
-export interface VideoCheckResponse {
-  exists: boolean;
-  translation_id: string | null;
-  video_id: string | null;
-}
-
-export const videoApi = {
-  process: async (data: VideoProcessRequest): Promise<VideoProcessResponse> => {
-    const response = await api.post<VideoProcessResponse>('/api/video/process', data);
-    return response.data;
-  },
-
-  check: async (
-    youtube_url: string,
-    source_language: string,
-    target_language: string
-  ): Promise<VideoCheckResponse> => {
-    const response = await api.get<VideoCheckResponse>('/api/video/check', {
-      params: { youtube_url, source_language, target_language },
-    });
-    return response.data;
-  },
-
-  getSubtitles: async (
-    video_id: string,
-    source_language: string,
-    target_language: string
-  ): Promise<SubtitlesResponse> => {
-    const response = await api.get<SubtitlesResponse>(
-      `/api/video/${video_id}/subtitles`,
-      {
-        params: { source_language, target_language },
-      }
-    );
-    return response.data;
-  },
-
-  getJobStatus: async (job_id: string): Promise<JobStatusResponse> => {
-    const response = await api.get<JobStatusResponse>(
-      `/api/video/job/${job_id}/status`
-    );
-    return response.data;
-  },
-
-  listVideos: async (): Promise<{ videos: any[]; total: number }> => {
-    const response = await api.get('/api/video/list');
-    return response.data;
-  },
-
-  deleteTranslation: async (
-    video_id: string,
-    source_language: string,
-    target_language: string
-  ): Promise<{ message: string }> => {
-    const response = await api.delete(`/api/video/${video_id}/translation`, {
-      params: { source_language, target_language },
-    });
-    return response.data;
-  },
-
-  deleteVideo: async (
-    video_id: string
-  ): Promise<{ message: string; deleted_translations: number }> => {
-    const response = await api.delete(`/api/video/${video_id}`);
-    return response.data;
-  },
-
-  deleteAllVideos: async (): Promise<{
-    message: string;
-    deleted_videos: number;
-    deleted_translations: number
-  }> => {
-    const response = await api.delete('/api/video/all');
-    return response.data;
-  },
-
-  getMusicPhrase: async (params: {
-    direction: string;
-    difficulty: string;
-    video_ids?: string[];
-  }): Promise<any> => {
-    const response = await api.post('/api/practice/phrase/music-context', params);
-    return response.data;
-  },
-
-  getPracticeWords: async (params: {
-    direction: string;
-    difficulty: string;
-    video_ids?: string[];
-  }): Promise<{ words: string[] }> => {
-    const response = await api.post('/api/practice/words', params);
-    return response.data;
-  },
-  getCloze: async (params: {
-    mode: 'music-context' | 'new-context';
-    direction: string;
-    difficulty: string;
-    gaps?: number;
-    video_ids?: string[];
-  }): Promise<any> => {
-    const response = await api.post('/api/practice/cloze', params);
-    return response.data;
-  },
-
-  checkCloze: async (params: {
-    phrase_id: string;
-    answers: string[];
-    expected_answers?: string[];
-    direction: string;
-  }): Promise<{ is_correct: boolean; details?: any }> => {
-    const response = await api.post('/api/practice/check-cloze', params);
-    return response.data;
-  },
-
-  generatePracticePhrase: async (params: {
-    direction: string;
-    difficulty: string;
-    video_ids?: string[];
-    api_keys?: {
-      openrouter?: string;
-      groq?: string;
-      together?: string;
-    };
-    custom_prompt?: string;
-    preferred_agent?: { service: string; model: string };
-  }): Promise<any> => {
-    const response = await api.post('/api/practice/phrase/new-context', params);
-    return response.data;
-  },
-  getScramblePhrase: async (params: {
-    direction: string;
-    difficulty: string;
-    video_ids?: string[];
-  }): Promise<any> => {
-    const response = await api.post('/api/practice/phrase/scramble', params);
-    return response.data;
-  },
-  checkScramble: async (params: {
-    phrase_id: string;
-    sequence: string[];
-  }) : Promise<{ is_correct: boolean; correct_answer?: string }> => {
-    const response = await api.post('/api/practice/check-scramble', params);
-    return response.data;
-  },
-  // word/example endpoint removed — vocab cards not used
-
-  getAvailableAgents: async (apiKeys?: { gemini?: string; openrouter?: string; groq?: string; together?: string }): Promise<{ agents: Array<{ service: string; model: string; display_name: string; available: boolean }> }> => {
-    const response = await api.post('/api/practice/available-agents', { api_keys: apiKeys || {} });
-    return response.data;
-  },
-
-  checkPracticeAnswer: async (params: {
-    phrase_id: string;
-    user_answer: string;
-    direction: string;
-  }): Promise<{ is_correct: boolean; correct_answer: string; similarity: number }> => {
-    const response = await api.post('/api/practice/check-answer', params);
-    return response.data;
-  },
-};
+// Video and Practice APIs removed as part of cleanup
 
 export interface ApiKeyStatus {
   service: string;
@@ -380,12 +183,14 @@ export const usageApi = {
 export interface RegisterRequest {
   email: string;
   username: string;
+  password?: string;
   native_language?: string;
   learning_language?: string;
 }
 
 export interface LoginRequest {
   email: string;
+  password?: string;
 }
 
 export interface TokenResponse {
@@ -432,80 +237,7 @@ export const authApi = {
 // CHAT
 // ============================================
 
-export interface ChatSessionCreate {
-  mode: 'writing' | 'conversation';
-  language: string;
-  preferred_service?: string;
-  preferred_model?: string;
-}
-
-export interface ChatSession {
-  id: string;
-  mode: string;
-  language: string;
-  model_service?: string;
-  model_name?: string;
-  is_active: boolean;
-  message_count: number;
-  session_context?: any;
-  teaching_language?: string;
-  custom_prompt?: string;
-  created_at: string;
-  updated_at?: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  content_type: 'text' | 'audio';
-  audio_url?: string;
-  transcription?: string;
-  grammar_errors?: any;
-  vocabulary_suggestions?: any;
-  difficulty_score?: number;
-  feedback_type?: string;
-  analysis_metadata?: {
-    selected_model?: string;
-    notices?: string[];
-  };
-  created_at: string;
-}
-
-export interface ChatSessionWithMessages extends ChatSession {
-  messages: ChatMessage[];
-}
-
-export interface ChatMessageCreate {
-  content: string;
-  content_type?: 'text' | 'audio';
-  audio_url?: string;
-  transcription?: string;
-}
-
-export interface AvailableModel {
-  name: string;
-  available: boolean;
-  blocked?: boolean;
-  category?: string;
-}
-
-export interface AvailableModelsResponse {
-  gemini?: AvailableModel[];
-  openrouter?: AvailableModel[];
-  groq?: AvailableModel[];
-  together?: AvailableModel[];
-}
-
-export interface ChangeModelRequest {
-  service: string;
-  model: string;
-}
-
-export interface UpdateSessionConfigRequest {
-  teaching_language?: string;
-  custom_prompt?: string;
-}
+// Chat API removed as part of cleanup
 
 export interface CatalogStatusResponse {
   is_populated: boolean;
@@ -525,58 +257,6 @@ export const modelCatalogApi = {
 
   sync: async (): Promise<{ success: boolean; stats: any; message: string }> => {
     const response = await api.post<{ success: boolean; stats: any; message: string }>('/api/model-catalog/sync');
-    return response.data;
-  },
-};
-
-export const chatApi = {
-  createSession: async (data: ChatSessionCreate): Promise<ChatSession> => {
-    const response = await api.post<ChatSession>('/api/chat/sessions', data);
-    return response.data;
-  },
-
-  listSessions: async (): Promise<ChatSession[]> => {
-    const response = await api.get<ChatSession[]>('/api/chat/sessions');
-    return response.data;
-  },
-
-  getSession: async (sessionId: string): Promise<ChatSessionWithMessages> => {
-    const response = await api.get<ChatSessionWithMessages>(`/api/chat/sessions/${sessionId}`);
-    return response.data;
-  },
-
-  sendMessage: async (sessionId: string, message: ChatMessageCreate): Promise<ChatMessage> => {
-    const response = await api.post<ChatMessage>(`/api/chat/sessions/${sessionId}/messages`, message);
-    return response.data;
-  },
-
-  sendAudio: async (sessionId: string, audioFile: File): Promise<ChatMessage> => {
-    const formData = new FormData();
-    formData.append('audio_file', audioFile);
-    const response = await api.post<ChatMessage>(`/api/chat/sessions/${sessionId}/audio`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
-  },
-
-  closeSession: async (sessionId: string): Promise<void> => {
-    await api.delete(`/api/chat/sessions/${sessionId}`);
-  },
-
-  getAvailableModels: async (): Promise<AvailableModelsResponse> => {
-    const response = await api.get<AvailableModelsResponse>('/api/chat/available-models');
-    return response.data;
-  },
-
-  changeModel: async (sessionId: string, modelData: ChangeModelRequest): Promise<ChatSession> => {
-    const response = await api.patch<ChatSession>(`/api/chat/sessions/${sessionId}/model`, modelData);
-    return response.data;
-  },
-
-  updateConfig: async (sessionId: string, configData: UpdateSessionConfigRequest): Promise<ChatSession> => {
-    const response = await api.patch<ChatSession>(`/api/chat/sessions/${sessionId}/config`, configData);
     return response.data;
   },
 };

@@ -2,6 +2,29 @@ import { useState, useEffect } from 'react';
 import { storage } from '../../services/storage';
 import { usageApi, UsageStatsResponse } from '../../services/api';
 import './ApiUsage.css';
+/* Adicionar estilos inline ou no CSS para o badge pay-as-you-go */
+/* 
+.pay-as-you-go {
+  padding: 12px;
+  background: rgba(124, 58, 237, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pay-badge {
+  background: #7c3aed;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.pay-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+*/
 
 interface UsageStats {
   service: string;
@@ -35,6 +58,20 @@ export const ApiUsage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const PRICING: { [key: string]: number } = {
+    'openai': 0.03,      // $0.03 / 1k tokens (mix avg)
+    'anthropic': 0.015,  // $0.015 / 1k tokens
+    'meta': 0.001,       // $0.001 / 1k tokens
+    'gemini': 0.00,      // Free tier
+    'groq': 0.0005,      // Very cheap
+    'together': 0.0008,
+  };
+
+  const calculateCost = (service: string, tokens: number) => {
+    const rate = PRICING[service.toLowerCase()] || 0;
+    return (tokens / 1000) * rate;
+  };
+
   const loadUsageStats = async (days?: number) => {
     const period = days !== undefined ? days : periodDays;
     setLoading(true);
@@ -49,18 +86,19 @@ export const ApiUsage = () => {
         // Múltiplos serviços
         for (const serviceData of response.services) {
           const serviceName = getServiceDisplayName(serviceData.service || 'unknown');
+          const totalTokens = serviceData.total_tokens || 0;
 
           statsData.push({
             service: serviceName,
             requests: serviceData.requests || 0,
-            tokens: serviceData.total_tokens || 0,
+            tokens: totalTokens,
             input_tokens: serviceData.input_tokens || 0,
             output_tokens: serviceData.output_tokens || 0,
-            cost: 0, // Estimativa de custo pode ser adicionada depois
+            cost: calculateCost(serviceData.service || 'unknown', totalTokens),
             models: serviceData.models || [],
             quota: {
               limit: getQuotaLimit(serviceData.service || 'unknown'),
-              used: serviceData.total_tokens || 0,
+              used: totalTokens,
               resetDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
             },
           });
@@ -68,17 +106,19 @@ export const ApiUsage = () => {
       } else if (response.service) {
         // Um serviço específico
         const serviceName = getServiceDisplayName(response.service || 'unknown');
+        const totalTokens = response.total_tokens || 0;
+
         statsData.push({
           service: serviceName,
           requests: response.requests || 0,
-          tokens: response.total_tokens || 0,
+          tokens: totalTokens,
           input_tokens: response.input_tokens || 0,
           output_tokens: response.output_tokens || 0,
-          cost: 0,
+          cost: calculateCost(response.service || 'unknown', totalTokens),
           models: response.models || [],
           quota: {
             limit: getQuotaLimit(response.service || 'unknown'),
-            used: response.total_tokens || 0,
+            used: totalTokens,
             resetDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
           },
         });
@@ -232,24 +272,34 @@ export const ApiUsage = () => {
 
               <div className="usage-quota">
                 <div className="quota-header">
-                  <span>Quota Diária</span>
+                  <span>{stat.cost > 0 ? 'Status do Plano' : 'Quota Diária'}</span>
                   <span className="quota-numbers">
-                    {stat.quota.used.toLocaleString()} / {stat.quota.limit.toLocaleString()}
+                    {stat.cost > 0 ? '' : `${stat.quota.used.toLocaleString()} / ${stat.quota.limit.toLocaleString()}`}
                   </span>
                 </div>
-                <div className="quota-bar">
-                  <div
-                    className="quota-fill"
-                    style={{
-                      width: `${percentage}%`,
-                      backgroundColor: color,
-                    }}
-                  />
-                </div>
-                <div className="quota-footer">
-                  <span className="quota-percentage">{percentage.toFixed(1)}% usado</span>
-                  <span className="quota-reset">Reset: {stat.quota.resetDate}</span>
-                </div>
+
+                {stat.cost > 0 ? (
+                  <div className="pay-as-you-go">
+                    <span className="pay-badge">Pay-as-you-go</span>
+                    <span className="pay-desc">Faturamento por uso</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="quota-bar">
+                      <div
+                        className="quota-fill"
+                        style={{
+                          width: `${percentage}%`,
+                          backgroundColor: color,
+                        }}
+                      />
+                    </div>
+                    <div className="quota-footer">
+                      <span className="quota-percentage">{percentage.toFixed(1)}% usado</span>
+                      <span className="quota-reset">Reset: {stat.quota.resetDate}</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           );

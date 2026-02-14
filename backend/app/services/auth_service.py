@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.models.database import User
-from app.modules.user_intelligence.models.models import UserProfile
+
 from app.config import settings
 import secrets
 import logging
@@ -16,6 +16,14 @@ import hashlib
 logger = logging.getLogger(__name__)
 
 # Configuração de hash de senha
+# Patch para incompatibilidade entre passlib e bcrypt 4.0.0+
+try:
+    import bcrypt
+    if not hasattr(bcrypt, "__about__"):
+        bcrypt.__about__ = type('about', (), {'__version__': bcrypt.__version__})
+except ImportError:
+    pass
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Configuração JWT - usar chave secreta do .env ou gerar uma
@@ -38,42 +46,36 @@ def _pre_hash_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verifica se a senha está correta.
-    Usa pré-hash SHA-256 para evitar problemas com senhas > 72 bytes.
     """
-    # Faz pré-hash da senha antes de verificar
-    pre_hashed = _pre_hash_password(plain_password)
-    return pwd_context.verify(pre_hashed, hashed_password)
+    try:
+        pre_hashed = _pre_hash_password(plain_password)
+        # Verifica usando bcrypt direto se possível, fallback para pwd_context
+        # Transformamos strings em bytes para o bcrypt
+        return bcrypt.checkpw(
+            pre_hashed.encode('utf-8'), 
+            hashed_password.encode('utf-8')
+        )
+    except Exception as e:
+        logger.error(f"Erro ao verificar senha: {e}")
+        # Fallback para passlib se o hash estiver num formato que o bcrypt puro não entenda
+        return pwd_context.verify(_pre_hash_password(plain_password), hashed_password)
 
 
 def get_password_hash(password: str) -> str:
     """
-    Gera hash da senha usando bcrypt.
-    Usa pré-hash SHA-256 para evitar problemas com senhas > 72 bytes.
-    
-    Fluxo:
-    1. Senha original (qualquer tamanho) -> SHA-256 -> 64 caracteres hex (32 bytes)
-    2. Hash SHA-256 (32 bytes) -> bcrypt -> hash final
-    
-    Isso permite senhas de qualquer tamanho sem truncamento ou erros.
+    Gera hash da senha usando bcrypt direto.
     """
     try:
-        # Faz pré-hash da senha antes de passar para bcrypt
         pre_hashed = _pre_hash_password(password)
-        logger.debug(f"Fazendo hash de senha (pré-hash SHA-256: {len(pre_hashed)} caracteres)")
-        return pwd_context.hash(pre_hashed)
+        # Gera sal e hash
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(pre_hashed.encode('utf-8'), salt)
+        return hashed.decode('utf-8')
     except Exception as e:
-        error_msg = str(e)
-        logger.error(f"Erro ao fazer hash da senha: {error_msg}")
-        # Se ainda houver erro de 72 bytes, significa que algo está errado
-        if "72 bytes" in error_msg.lower() or "truncate" in error_msg.lower():
-            logger.error("Erro de 72 bytes mesmo após pré-hash SHA-256 - isso não deveria acontecer!")
-            # Tenta uma abordagem alternativa: usar apenas os primeiros 72 bytes do pré-hash
-            # (embora isso não deveria ser necessário, pois SHA-256 sempre produz 64 caracteres)
-            pre_hashed = _pre_hash_password(password)
-            if len(pre_hashed.encode('utf-8')) > 72:
-                pre_hashed = pre_hashed[:72]
-            return pwd_context.hash(pre_hashed)
-        raise
+        logger.error(f"Erro ao fazer hash da senha com bcrypt direto: {e}")
+        # Se falhar, tenta via passlib (com o patch já aplicado no topo do arquivo)
+        pre_hashed = _pre_hash_password(password)
+        return pwd_context.hash(pre_hashed)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -121,32 +123,22 @@ def create_user(
     db: Session,
     email: str,
     username: str,
-    native_language: str = "pt",
-    learning_language: str = "en"
+    password: str = None
 ) -> User:
-    """Cria novo usuário com perfil"""
+    """Cria novo usuário com senha devidamente hasheada"""
     # Verifica se email ou username já existem
     if get_user_by_email(db, email):
         raise ValueError("Email já está em uso")
     if get_user_by_username(db, username):
         raise ValueError("Username já está em uso")
     
-    # Cria usuário (sem senha)
+    # Cria usuário com hash de senha
     user = User(
         email=email,
-        username=username
+        username=username,
+        password=get_password_hash(password) if password else None
     )
     db.add(user)
-    db.flush()  # Para obter o ID do usuário
-    
-    # Cria perfil
-    profile = UserProfile(
-        user_id=user.id,
-        native_language=native_language,
-        learning_language=learning_language,
-        proficiency_level="beginner"
-    )
-    db.add(profile)
     db.commit()
     db.refresh(user)
     
@@ -154,11 +146,22 @@ def create_user(
     return user
 
 
-def authenticate_user(db: Session, email: str) -> Optional[User]:
-    """Autentica usuário apenas por email (sem senha)"""
+def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
+    """
+    Autentica usuário por email e senha usando hash.
+    """
     user = get_user_by_email(db, email)
     if not user:
         return None
     if not user.is_active:
         return None
+
+    # Verificação de hash
+    stored_hash = getattr(user, "password", None)
+    if not stored_hash:
+        return None
+        
+    if not verify_password(password, stored_hash):
+        return None
+        
     return user

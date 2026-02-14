@@ -44,6 +44,16 @@ const AgentChatView: React.FC = () => {
             setSession(sessionData);
             setAvailableModels(models);
 
+            // Se não houver mensagens, mostrar o prompt inicial como mensagem do sistema
+            if (history.length === 0 && sessionData?.agent?.base_prompt) {
+                setMessages([{
+                    id: 'initial-prompt',
+                    role: 'system',
+                    content: `### 🤖 Instruções do Agente\n\n${sessionData.agent.base_prompt}`,
+                    created_at: new Date().toISOString()
+                }]);
+            }
+
             // Tenta manter o modelo atual da sessão ou o configurado no Agente
             if (!selectedModel) {
                 const configModel = sessionData?.agent?.configuration?.model;
@@ -141,7 +151,7 @@ const AgentChatView: React.FC = () => {
                     {messages.map((msg) => (
                         <div key={msg.id} className={`message-container ${msg.role}`}>
                             <div className={`message-bubble ${msg.role}`}>
-                                {msg.role === 'assistant' ? (
+                                {['assistant', 'system'].includes(msg.role) ? (
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                                 ) : (
                                     msg.content

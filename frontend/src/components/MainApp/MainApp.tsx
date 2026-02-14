@@ -1,32 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
-import { URLInput } from '../URLInput/URLInput';
-import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
-import { JobStatus } from '../JobStatus/JobStatus';
-import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
-import { VideoList } from '../VideoList/VideoList';
 import { ApiKeyManager } from '../ApiKeyManager/ApiKeyManager';
 import { ApiUsage } from '../ApiUsage/ApiUsage';
 import { ModelPreferences } from '../ModelPreferences/ModelPreferences';
-import { KnowledgePractice } from '../KnowledgePractice/KnowledgePractice';
-import { Chat } from '../Chat/Chat';
-import { useJobPolling } from '../../hooks/useJobPolling';
-import { useVideoTranslation } from '../../hooks/useVideoTranslation';
-import { storage } from '../../services/storage';
-import { videoApi } from '../../services/api';
 
 import AgentsManager from '../Agents/AgentsManager';
 import AgentChatView from '../Agents/AgentChatView';
 import { MCPFactory } from '../MCPFactory/MCPFactory';
 
+import { WorkflowEditor } from '../Workflow/WorkflowEditor';
+
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const MainApp = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
+
+  const isTestUser = user?.email === 'usuario@teste.com';
 
   // Sincroniza activeTab com a URL ou estado interno
-  const [activeTab, setActiveTabState] = useState('translate');
+  const [activeTab, setActiveTabState] = useState('api-keys');
 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
@@ -38,223 +33,74 @@ export const MainApp = () => {
     const segments = location.pathname.split('/');
     // Formato esperado: /app/:tab/...
     const tabName = segments[2];
-    if (tabName && ['translate', 'videos', 'practice', 'chat', 'agents', 'mcp-factory', 'api-keys'].includes(tabName)) {
+    if (tabName && ['agents', 'mcp-factory', 'api-keys', 'workflows'].includes(tabName)) {
       setActiveTabState(tabName);
     }
   }, [location]);
   const [apiKeysSubTab, setApiKeysSubTab] = useState<'keys' | 'usage' | 'preferences'>('keys');
-  const [youtubeUrl, setYoutubeUrl] = useState('');
-  const [videoId, setVideoId] = useState<string | null>(null);
-  const [sourceLanguage, setSourceLanguage] = useState(storage.getSourceLanguage());
-  const [targetLanguage, setTargetLanguage] = useState(storage.getTargetLanguage());
-  const [geminiApiKey, setGeminiApiKey] = useState<string | null>(null);
-  const [jobId, setJobId] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(false);
 
-  const { jobStatus, isPolling } = useJobPolling(jobId, !!jobId);
-  const { subtitles, loading: subtitlesLoading, loadSubtitles } = useVideoTranslation();
-
-  useEffect(() => {
-    const saved = storage.getGeminiApiKey();
-    if (saved) {
-      setGeminiApiKey(saved);
-    }
-  }, []);
-
-  useEffect(() => {
-    storage.setSourceLanguage(sourceLanguage);
-  }, [sourceLanguage]);
-
-  useEffect(() => {
-    storage.setTargetLanguage(targetLanguage);
-  }, [targetLanguage]);
-
-  // Quando job completa, carrega legendas
-  useEffect(() => {
-    if (jobStatus?.status === 'completed' && jobStatus.video_id) {
-      loadSubtitles(jobStatus.video_id, sourceLanguage, targetLanguage);
-    }
-  }, [jobStatus, sourceLanguage, targetLanguage, loadSubtitles]);
-
-  const extractVideoId = (url: string): string | null => {
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-    ];
-
-    for (const pattern of patterns) {
-      const match = url.match(pattern);
-      if (match) {
-        return match[1];
-      }
-    }
-    return null;
-  };
-
-  const handleUrlSubmit = async (url: string) => {
-    setYoutubeUrl(url);
-    const extractedId = extractVideoId(url);
-
-    if (!extractedId) {
-      alert('URL do YouTube inválida.');
-      return;
-    }
-
-    setVideoId(extractedId);
-    setProcessing(true);
-
-    try {
-      // Verifica se já existe tradução
-      const check = await videoApi.check(url, sourceLanguage, targetLanguage);
-
-      if (check.exists && check.video_id) {
-        // Pergunta ao usuário se deseja retraduzir
-        const shouldRetranslate = window.confirm(
-          'Este vídeo já foi traduzido. Deseja retraduzir com as correções aplicadas?\n\n' +
-          'Clique em "OK" para retraduzir ou "Cancelar" para usar a tradução existente.'
-        );
-
-        if (shouldRetranslate) {
-          // Retraduz com as correções
-          const response = await videoApi.process({
-            youtube_url: url,
-            source_language: sourceLanguage,
-            target_language: targetLanguage,
-            gemini_api_key: geminiApiKey || null,
-            force_retranslate: true,
-          });
-          setJobId(response.job_id);
-          return;
-        } else {
-          // Carrega tradução existente
-          await loadSubtitles(check.video_id, sourceLanguage, targetLanguage);
-          setProcessing(false);
-          return;
-        }
-      }
-
-      // Inicia novo processamento
-      const response = await videoApi.process({
-        youtube_url: url,
-        source_language: sourceLanguage,
-        target_language: targetLanguage,
-        gemini_api_key: geminiApiKey || null,
-      });
-
-      setJobId(response.job_id);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || 'Erro ao processar vídeo';
-      alert(errorMessage);
-      setProcessing(false);
-    }
-  };
-
-  const handleVideoSelect = async (selectedVideoId: string, selectedYoutubeId: string, sourceLang: string, targetLang: string) => {
-    setVideoId(selectedYoutubeId);
-    setYoutubeUrl(`https://www.youtube.com/watch?v=${selectedYoutubeId}`);
-    setSourceLanguage(sourceLang);
-    setTargetLanguage(targetLang);
-    setActiveTab('translate');
-    // Carrega as legendas imediatamente
-    await loadSubtitles(selectedVideoId, sourceLang, targetLang);
-  };
+  const renderDevOverlay = () => (
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'rgba(15, 23, 42, 0.6)',
+      backdropFilter: 'blur(4px)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 50,
+      flexDirection: 'column',
+      gap: '16px'
+    }}>
+      <div style={{
+        background: 'rgba(30, 41, 59, 0.9)',
+        padding: '32px',
+        borderRadius: '16px',
+        border: '1px solid rgba(139, 92, 246, 0.3)',
+        boxShadow: '0 0 40px rgba(0,0,0,0.5)',
+        textAlign: 'center',
+        maxWidth: '400px'
+      }}>
+        <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🚧</div>
+        <h2 style={{
+          color: '#f8fafc',
+          marginBottom: '8px',
+          fontSize: '1.5rem',
+          fontWeight: 'bold'
+        }}>Em Desenvolvimento</h2>
+        <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>
+          Esta funcionalidade está sendo construída e estará disponível em breve para testes.
+        </p>
+      </div>
+    </div>
+  );
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'translate':
-        return (
-          <div className="tab-content">
-            <div className="tab-header">
-              <h2>Traduzir Novo Vídeo</h2>
-              <p>Cole a URL do YouTube e traduza as legendas</p>
-            </div>
-
-            <LanguageSelector
-              sourceLanguage={sourceLanguage}
-              targetLanguage={targetLanguage}
-              onSourceChange={setSourceLanguage}
-              onTargetChange={setTargetLanguage}
-            />
-            <div className="translation-note" style={{ marginTop: '8px', color: '#444', fontSize: '0.95rem' }}>
-              Observação: atualmente o sistema suporta apenas traduções e legendas entre <strong>Inglês ↔ Português</strong>.
-            </div>
-
-            <URLInput onSubmit={handleUrlSubmit} loading={processing} />
-
-            {jobId && <JobStatus jobStatus={jobStatus} isPolling={isPolling} jobId={jobId} />}
-
-            {jobStatus?.status === 'error' && (
-              <div className="error-message">
-                Erro no processamento. Verifique sua chave de API e tente novamente.
-              </div>
-            )}
-
-            {subtitlesLoading && (
-              <div className="loading-message">Carregando legendas...</div>
-            )}
-
-            {subtitles && videoId && !subtitlesLoading && youtubeUrl && (
-              <div style={{ marginTop: '24px' }}>
-                <VideoPlayer
-                  videoId={videoId}
-                  segments={subtitles.segments}
-                  sourceLanguage={subtitles.source_language}
-                  targetLanguage={subtitles.target_language}
-                />
-              </div>
-            )}
-          </div>
-        );
-
-      case 'videos':
-        return (
-          <div className="tab-content">
-            <div className="tab-header">
-              <h2>Meus Vídeos Traduzidos</h2>
-              <p>Selecione um vídeo para assistir com legendas traduzidas</p>
-            </div>
-            <VideoList onVideoSelect={handleVideoSelect} />
-            {subtitlesLoading && (
-              <div className="loading-message" style={{ marginTop: '24px' }}>Carregando vídeo...</div>
-            )}
-            {subtitles && videoId && !subtitlesLoading && (
-              <div style={{ marginTop: '24px' }}>
-                <VideoPlayer
-                  videoId={videoId}
-                  segments={subtitles.segments}
-                  sourceLanguage={subtitles.source_language}
-                  targetLanguage={subtitles.target_language}
-                />
-              </div>
-            )}
-          </div>
-        );
-
-      case 'practice':
-        return (
-          <div className="tab-content">
-            <KnowledgePractice />
-          </div>
-        );
-
-      case 'chat':
-        return (
-          <div className="tab-content">
-            <Chat />
-          </div>
-        );
 
       case 'agents':
         return (
-          <div className="tab-content">
+          <div className="tab-content" style={{ position: 'relative' }}>
             <AgentsManager />
           </div>
         );
 
       case 'mcp-factory':
         return (
-          <div className="tab-content">
+          <div className="tab-content" style={{ position: 'relative' }}>
+            {isTestUser && renderDevOverlay()}
             <MCPFactory />
+          </div>
+        );
+
+      case 'workflows':
+        return (
+          <div className="tab-content" style={{ position: 'relative' }}>
+            {isTestUser && renderDevOverlay()}
+            <WorkflowEditor />
           </div>
         );
 
@@ -262,7 +108,7 @@ export const MainApp = () => {
         return (
           <div className="tab-content">
             <div className="tab-header">
-              <h2>Modelos LLM</h2>
+              <h2>Dashboard LLM</h2>
               <p>Configure suas chaves de API e monitore seu uso</p>
             </div>
 

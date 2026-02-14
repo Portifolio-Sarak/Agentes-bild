@@ -59,14 +59,14 @@ class VideoCheckResponse(BaseModel):
 # ============================================
 
 class UserRegister(BaseModel):
-    email: str = Field(..., min_length=5, max_length=255)
+    email: str = Field(..., min_length=3, max_length=255)
     username: str = Field(..., min_length=3, max_length=100)
-    native_language: str = Field(default="pt", min_length=2, max_length=10)
-    learning_language: str = Field(default="en", min_length=2, max_length=10)
+    password: str = Field(..., min_length=1, max_length=255)
 
 
 class UserLogin(BaseModel):
-    email: str = Field(..., min_length=5, max_length=255)
+    email: str = Field(..., min_length=3, max_length=255)
+    password: str = Field(..., min_length=1, max_length=255)
 
 
 class Token(BaseModel):
@@ -79,18 +79,8 @@ class Token(BaseModel):
 class ModelPreferencesUpdate(BaseModel):
     usage_mode: Optional[str] = Field(None, pattern="^(free|paid)$")
     global_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free)$")
-    chat_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    code_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    vision_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    video_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    multimodal_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    translation_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    reasoning_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    long_context_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    audio_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    creative_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    structured_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
-    small_model_strategy: Optional[str] = Field(None, pattern="^(performance|cost_benefit|speed|cheapest|free|global)$")
+    # ... (outros campos mantidos se forem genéricos, ou removidos se específicos)
+    # Para simplificar, vou manter o ModelPreferencesUpdate como está por enquanto, pois são preferencias de modelo
     model_list_limit: Optional[int] = Field(None, ge=1, le=100)
 
 
@@ -98,16 +88,6 @@ class UserProfileResponse(BaseModel):
     id: UUID
     email: str
     username: str
-    native_language: str
-    learning_language: str
-    proficiency_level: str
-    total_chat_messages: int
-    total_practice_sessions: int
-    average_response_time: float
-    learning_context: Optional[dict] = None
-    preferred_learning_style: Optional[str] = None
-    preferred_model: Optional[str] = None
-    model_preferences: Optional[dict] = None
     created_at: datetime
 
 

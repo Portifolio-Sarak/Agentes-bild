@@ -516,8 +516,8 @@ export const MCPFactory: React.FC = () => {
         <div className="mcp-factory-container">
             <div className="mcp-factory-header">
                 <div className="title-area">
-                    <h1>🏗️ Fábrica de Agentes MCP</h1>
-                    <p>Crie especialistas sob demanda integrados ao seu ecossistema.</p>
+                    <h1>Agentes</h1>
+                    <p>Crie, edite e gerencie seus agentes inteligentes e ferramentas personalizadas.</p>
                 </div>
                 <div className="assistant-settings">
                     <label>Copiloto:</label>
@@ -1008,31 +1008,35 @@ export const MCPFactory: React.FC = () => {
             </div>
 
             {/* Modais Enterprise (Secrets / Versioning removidos por brevidade ou simplificados) */}
-            {isSecretsModalOpen && (
-                <div className="modal-overlay" onClick={() => setIsSecretsModalOpen(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <h2>🔐 Gestor de Segredos</h2>
-                        <button className="btn-primary" onClick={() => setIsSecretsModalOpen(false)}>Fechar</button>
+            {
+                isSecretsModalOpen && (
+                    <div className="modal-overlay" onClick={() => setIsSecretsModalOpen(false)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <h2>🔐 Gestor de Segredos</h2>
+                            <button className="btn-primary" onClick={() => setIsSecretsModalOpen(false)}>Fechar</button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
-            {isVersionModalOpen && (
-                <div className="modal-overlay" onClick={() => setIsVersionModalOpen(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <h2>🚀 Publicar Nova Versão</h2>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Deseja publicar a versão v{blueprint.version} do agente "{blueprint.name}"?</p>
-                        <div className="config-field" style={{ marginTop: '16px' }}>
-                            <label>Log de Alterações (Changelog)</label>
-                            <textarea rows={3} placeholder="O que mudou nesta versão?" />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
-                            <button className="btn-secondary" onClick={() => setIsVersionModalOpen(false)}>Cancelar</button>
-                            <button className="btn-primary" onClick={() => { alert('Agente Publicado!'); setIsVersionModalOpen(false); }}>Publicar e Ativar</button>
+            {
+                isVersionModalOpen && (
+                    <div className="modal-overlay" onClick={() => setIsVersionModalOpen(false)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <h2>🚀 Publicar Nova Versão</h2>
+                            <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Deseja publicar a versão v{blueprint.version} do agente "{blueprint.name}"?</p>
+                            <div className="config-field" style={{ marginTop: '16px' }}>
+                                <label>Log de Alterações (Changelog)</label>
+                                <textarea rows={3} placeholder="O que mudou nesta versão?" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+                                <button className="btn-secondary" onClick={() => setIsVersionModalOpen(false)}>Cancelar</button>
+                                <button className="btn-primary" onClick={() => { alert('Agente Publicado!'); setIsVersionModalOpen(false); }}>Publicar e Ativar</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Playground Area */}
             <div className="playground-section">
@@ -1046,21 +1050,23 @@ export const MCPFactory: React.FC = () => {
             </div>
 
             {/* Import Modal */}
-            {isImportModalOpen && (
-                <div className="modal-overlay" onClick={() => setIsImportModalOpen(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <h2>Importar Fluxo n8n</h2>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Arraste o arquivo JSON do seu workflow para converter em um Agente Automático.</p>
-                        <div className="drop-zone">
-                            <p>Arraste arquivos aqui ou clique para selecionar</p>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-                            <button className="btn-secondary" onClick={() => setIsImportModalOpen(false)}>Cancelar</button>
-                            <button className="btn-primary" onClick={() => setIsImportModalOpen(false)}>Importar e Mapear</button>
+            {
+                isImportModalOpen && (
+                    <div className="modal-overlay" onClick={() => setIsImportModalOpen(false)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <h2>Importar Fluxo n8n</h2>
+                            <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Arraste o arquivo JSON do seu workflow para converter em um Agente Automático.</p>
+                            <div className="drop-zone">
+                                <p>Arraste arquivos aqui ou clique para selecionar</p>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                                <button className="btn-secondary" onClick={() => setIsImportModalOpen(false)}>Cancelar</button>
+                                <button className="btn-primary" onClick={() => setIsImportModalOpen(false)}>Importar e Mapear</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };

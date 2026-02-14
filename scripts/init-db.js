@@ -5,21 +5,28 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-const backendDir = path.join(__dirname, '..', 'backend');
+const rootDir = path.join(__dirname, '..');
+const backendDir = path.join(rootDir, 'backend');
 const isWindows = os.platform() === 'win32';
 
-// Detecta o Python do ambiente virtual
+// Detecta o Python do ambiente virtual na raiz ou no backend
 let pythonPath;
 
 if (isWindows) {
-  const venvPython = path.join(backendDir, 'venv', 'Scripts', 'python.exe');
-  if (fs.existsSync(venvPython)) {
-    pythonPath = venvPython;
+  const rootVenv = path.join(rootDir, '.venv', 'Scripts', 'python.exe');
+  const backendVenv = path.join(backendDir, 'venv', 'Scripts', 'python.exe');
+  if (fs.existsSync(rootVenv)) {
+    pythonPath = rootVenv;
+  } else if (fs.existsSync(backendVenv)) {
+    pythonPath = backendVenv;
   }
 } else {
-  const venvPython = path.join(backendDir, 'venv', 'bin', 'python');
-  if (fs.existsSync(venvPython)) {
-    pythonPath = venvPython;
+  const rootVenv = path.join(rootDir, '.venv', 'bin', 'python');
+  const backendVenv = path.join(backendDir, 'venv', 'bin', 'python');
+  if (fs.existsSync(rootVenv)) {
+    pythonPath = rootVenv;
+  } else if (fs.existsSync(backendVenv)) {
+    pythonPath = backendVenv;
   }
 }
 

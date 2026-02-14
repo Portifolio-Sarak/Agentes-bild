@@ -285,3 +285,29 @@
   padding: 4px 8px;
   border-radius: 4px;
 }
+
+.pay-as-you-go {
+  padding: 12px;
+  background: rgba(124, 58, 237, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.pay-badge {
+  background: #7c3aed;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pay-desc {
+  color: var(--text-primary);
+  opacity: 0.8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

@@ -17,7 +17,7 @@ def create_database_engine():
         # Extrai componentes
         host = parsed.hostname or "localhost"
         port = parsed.port or 5432
-        database = parsed.path.lstrip('/') if parsed.path else "Agente_traducao"
+        database = parsed.path.lstrip('/') if parsed.path else "Agents_workflow"
         user = parsed.username or "postgres"
         password = parsed.password or ""
         
