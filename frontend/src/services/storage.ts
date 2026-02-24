@@ -8,9 +8,9 @@ const STORAGE_KEYS = {
   PRACTICE_SESSIONS: 'practice_sessions',
   CURRENT_PHRASE: 'current_practice_phrase',
   CURRENT_USER_ANSWER: 'current_user_answer',
-  AUTH_TOKEN: 'auth_token',
-  USER_ID: 'user_id',
-  USERNAME: 'username',
+  AUTH_TOKEN: 'agentes_auth_token',
+  USER_ID: 'agentes_user_id',
+  USERNAME: 'agentes_username',
   REMEMBER_ME: 'remember_me',
 } as const;
 

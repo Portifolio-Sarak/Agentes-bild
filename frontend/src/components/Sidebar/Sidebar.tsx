@@ -14,6 +14,7 @@ export const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
   const navigate = useNavigate();
 
   const tabs = [
+    { id: 'introducao', label: 'Introdução' },
     { id: 'api-keys', label: 'Dashboard LLM' },
     { id: 'agents', label: 'Especialistas RAG' },
     { id: 'mcp-factory', label: 'Agentes' },

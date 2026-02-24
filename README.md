@@ -1,13 +1,35 @@
-# Sarak - Plataforma de Agentes e Aprendizado de Idiomas
+# Sarak - Plataforma de Agentes Especialistas
 
-Este projeto é uma plataforma modular para agentes de IA e aprendizado de idiomas, utilizando FastAPI (Python) no backend e Vite (React) no frontend.
+O Sarak é um ecossistema de Inteligência Artificial focado em continuidade cognitiva, consistência de personalidade e democratização da automação. O sistema utiliza tecnologias de ponta como RAG, bancos de dados vetoriais e protocolos de interoperabilidade para oferecer uma experiência de IA robusta e acessível.
+
+---
+
+## 🏗️ Funcionalidades Principais
+
+### 1. Agentes Especialistas com Memória de Longo Prazo
+Módulo desenvolvido para solucionar os desafios críticos de "amnésia" de contexto e diluição de identidade em conversas extensas:
+- **Persistência via RAG (Retrieval-Augmented Generation):** Utiliza o banco vetorial **ChromaDB** para implementar uma memória semântica baseada em embeddings, permitindo a recuperação de informações históricas por similaridade.
+- **Preservação de Identidade:** Mecanismo de re-injeção de diretrizes (*System Prompts*) que garante uma persona consistente independentemente da duração da sessão.
+
+### 2. Dashboard LLM: Inteligência e Roteamento
+Centro de orquestração que automatiza a curadoria e o consumo de IA:
+- **Catálogo Dinâmico:** Ingestão automática de modelos via **OpenRouter API**, capturando metadados como janelas de contexto e precificação.
+- **Seleção por Performance (Elo Rating):** Integração com o **Chatbot Arena (LMSYS)** para classificar modelos por excelência técnica comprovada.
+- **Roteamento Inteligente:** Seleção automática da API mais eficiente baseada em critérios de latência, custo e qualidade para cada tarefa específica.
+
+### 3. Democracia Digital: Criação Conversacional (Zero Code)
+Foco total na acessibilidade para usuários sem experiência técnica:
+- **Arquiteto de IA:** Um chat de auxílio que traduz intenções em linguagem natural para arquiteturas funcionais de **Agentes** e **Workflows**.
+- **Automação por Intenção:** O usuário define o objetivo final e o sistema orquestra a conexão entre especialistas e ferramentas (via protocolo **MCP**) sem exigir uma única linha de código.
+
+---
 
 ## 🚀 Como instalar em um novo computador
 
 ### 1. Pré-requisitos
 - **Python 3.10+**
 - **Node.js 18+**
-- **PostgreSQL** instalado e rodando.
+- **PostgreSQL** instalado e operacional.
 
 ### 2. Configuração do Banco de Dados
 1. Crie um banco de dados no PostgreSQL chamado `Agente_traducao`.
@@ -37,19 +59,10 @@ Este projeto é uma plataforma modular para agentes de IA e aprendizado de idiom
    ```bash
    python init_db.py
    ```
-6. (Opcional) Popule dados iniciais:
-   ```bash
-   python seed_canonical_names.py
-   ```
 
 ### 4. Configuração do Frontend
-1. Na raiz do projeto, instale as dependências do Node:
+1. Na raiz do projeto ou na pasta `frontend`, instale as dependências:
    ```bash
-   npm install
-   ```
-2. (Se houver uma pasta `frontend` separada):
-   ```bash
-   cd frontend
    npm install
    ```
 
@@ -64,11 +77,8 @@ python -m uvicorn app.main:app --reload
 
 ### Executar Frontend
 ```bash
-# Na raiz ou na pasta frontend
 npm run dev
 ```
 
 ---
 
-## 🏗️ Estrutura do Sistema
-Consulte o arquivo [MAPA_SISTEMA.md](file:///c:/Users/Igor/Desktop/Sarak/X%20-%20Trabalho/Code/Agentes/agente-aprendizado-idiomas/MAPA_SISTEMA.md) para detalhes técnicos da arquitetura do backend.

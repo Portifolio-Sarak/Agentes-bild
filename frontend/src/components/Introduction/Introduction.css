@@ -1,0 +1,122 @@
+.introduction-container {
+    padding: 60px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, sans-serif;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.intro-header {
+    text-align: left;
+    margin-bottom: 48px;
+    border-left: 4px solid #7c3aed;
+    padding-left: 24px;
+}
+
+.intro-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.intro-subtitle {
+    font-size: 1.25rem;
+    color: #7c3aed;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.intro-section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.section-text {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.card-box {
+    background: var(--bg-card);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.highlighted-section {
+    border-left: 4px solid #7c3aed;
+    background: linear-gradient(to right, rgba(124, 58, 237, 0.05), transparent);
+}
+
+.sub-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.sub-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #7c3aed;
+}
+
+.sub-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.tech-stack {
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.intro-footer-clean {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .introduction-container {
+        padding: 40px 16px;
+    }
+
+    .intro-title {
+        font-size: 2rem;
+    }
+}

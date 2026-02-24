@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       // Busca token de ambos storages
-      const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
-      
+      const token = localStorage.getItem('agentes_auth_token') || sessionStorage.getItem('agentes_auth_token');
+
       if (!token) {
         setIsAuthenticated(false);
         setUser(null);
@@ -70,18 +70,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string, rememberMe: boolean) => {
     try {
       const response: TokenResponse = await authApi.login({ email, password });
-      
+
       // Salva token e informações do usuário
       if (rememberMe) {
-        localStorage.setItem('auth_token', response.access_token);
-        localStorage.setItem('user_id', response.user_id);
-        localStorage.setItem('username', response.username);
+        localStorage.setItem('agentes_auth_token', response.access_token);
+        localStorage.setItem('agentes_user_id', response.user_id);
+        localStorage.setItem('agentes_username', response.username);
       } else {
-        sessionStorage.setItem('auth_token', response.access_token);
-        sessionStorage.setItem('user_id', response.user_id);
-        sessionStorage.setItem('username', response.username);
+        sessionStorage.setItem('agentes_auth_token', response.access_token);
+        sessionStorage.setItem('agentes_user_id', response.user_id);
+        sessionStorage.setItem('agentes_username', response.username);
       }
-      
+
       // Atualiza estado
       setIsAuthenticated(true);
       setUser({
@@ -110,12 +110,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         native_language: nativeLanguage,
         learning_language: learningLanguage,
       });
-      
+
       // Salva token e informações do usuário (sempre usa localStorage para registro)
-      localStorage.setItem('auth_token', response.access_token);
-      localStorage.setItem('user_id', response.user_id);
-      localStorage.setItem('username', response.username);
-      
+      localStorage.setItem('agentes_auth_token', response.access_token);
+      localStorage.setItem('agentes_user_id', response.user_id);
+      localStorage.setItem('agentes_username', response.username);
+
       // Atualiza estado
       setIsAuthenticated(true);
       setUser({
@@ -131,19 +131,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     // Limpa ambos localStorage e sessionStorage
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('username');
-    sessionStorage.removeItem('auth_token');
-    sessionStorage.removeItem('user_id');
-    sessionStorage.removeItem('username');
-    
+    localStorage.removeItem('agentes_auth_token');
+    localStorage.removeItem('agentes_user_id');
+    localStorage.removeItem('agentes_username');
+    sessionStorage.removeItem('agentes_auth_token');
+    sessionStorage.removeItem('agentes_user_id');
+    sessionStorage.removeItem('agentes_username');
+
     // Limpa chaves de API do localStorage (agora são salvas no backend por usuário)
     localStorage.removeItem('gemini_api_key');
     localStorage.removeItem('openrouter_api_key');
     localStorage.removeItem('groq_api_key');
     localStorage.removeItem('together_api_key');
-    
+
     setIsAuthenticated(false);
     setUser(null);
   };

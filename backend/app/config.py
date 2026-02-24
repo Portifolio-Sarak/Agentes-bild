@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     encryption_key: str
     jwt_secret_key: Optional[str] = None
     host: str = "0.0.0.0"
-    port: int = 8000
+    port: int = 8001
     frontend_url: str = "http://localhost:5173"
     
     # LLM Settings

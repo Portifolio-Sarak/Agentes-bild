@@ -9,6 +9,7 @@ import AgentChatView from '../Agents/AgentChatView';
 import { MCPFactory } from '../MCPFactory/MCPFactory';
 
 import { WorkflowEditor } from '../Workflow/WorkflowEditor';
+import { Introduction } from '../Introduction/Introduction';
 
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -21,7 +22,7 @@ export const MainApp = () => {
   const isTestUser = user?.email === 'usuario@teste.com';
 
   // Sincroniza activeTab com a URL ou estado interno
-  const [activeTab, setActiveTabState] = useState('api-keys');
+  const [activeTab, setActiveTabState] = useState('introducao');
 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
@@ -33,7 +34,7 @@ export const MainApp = () => {
     const segments = location.pathname.split('/');
     // Formato esperado: /app/:tab/...
     const tabName = segments[2];
-    if (tabName && ['agents', 'mcp-factory', 'api-keys', 'workflows'].includes(tabName)) {
+    if (tabName && ['introducao', 'agents', 'mcp-factory', 'api-keys', 'workflows'].includes(tabName)) {
       setActiveTabState(tabName);
     }
   }, [location]);
@@ -80,6 +81,12 @@ export const MainApp = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
+      case 'introducao':
+        return (
+          <div className="tab-content" style={{ padding: 0 }}>
+            <Introduction />
+          </div>
+        );
 
       case 'agents':
         return (
@@ -90,16 +97,14 @@ export const MainApp = () => {
 
       case 'mcp-factory':
         return (
-          <div className="tab-content" style={{ position: 'relative' }}>
-            {isTestUser && renderDevOverlay()}
+          <div className="tab-content">
             <MCPFactory />
           </div>
         );
 
       case 'workflows':
         return (
-          <div className="tab-content" style={{ position: 'relative' }}>
-            {isTestUser && renderDevOverlay()}
+          <div className="tab-content">
             <WorkflowEditor />
           </div>
         );
@@ -181,11 +186,14 @@ export const MainApp = () => {
     }
   };
 
+  const showDevOverlay = isTestUser && (activeTab === 'mcp-factory' || activeTab === 'workflows');
+
   return (
     <div className="app">
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
       <main className="app-main">
-        <div className="app-content">
+        <div className="app-content" style={{ position: 'relative', height: '100%' }}>
+          {showDevOverlay && renderDevOverlay()}
           <Routes>
             <Route path="agents/chat/:sessionId" element={<AgentChatView />} />
             <Route path="*" element={renderTabContent()} />

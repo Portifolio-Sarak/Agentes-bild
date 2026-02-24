@@ -46,7 +46,7 @@ if (!pythonPath) {
 }
 
 // Executa uvicorn
-const args = ['-m', 'uvicorn', 'app.main:app', '--reload'];
+const args = ['-m', 'uvicorn', 'app.main:app', '--reload', '--port', '8001'];
 const proc = spawn(pythonPath, args, {
   cwd: backendDir,
   stdio: 'inherit',

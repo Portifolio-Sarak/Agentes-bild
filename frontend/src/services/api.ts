@@ -3,7 +3,7 @@ import axios from 'axios';
 // Em alguns ambientes Windows, `localhost` pode resolver primeiro para IPv6 (::1),
 // enquanto o backend do Uvicorn está ouvindo apenas em 127.0.0.1. Isso causa erro
 // de rede no login (sem response). Usamos 127.0.0.1 como fallback seguro.
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8001';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -15,7 +15,7 @@ const api = axios.create({
 // Interceptor para adicionar token JWT automaticamente
 api.interceptors.request.use((config) => {
   // Verifica tanto localStorage quanto sessionStorage
-  const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+  const token = localStorage.getItem('agentes_auth_token') || sessionStorage.getItem('agentes_auth_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -28,12 +28,12 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token inválido ou expirado - limpa ambos storages
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user_id');
-      localStorage.removeItem('username');
-      sessionStorage.removeItem('auth_token');
-      sessionStorage.removeItem('user_id');
-      sessionStorage.removeItem('username');
+      localStorage.removeItem('agentes_auth_token');
+      localStorage.removeItem('agentes_user_id');
+      localStorage.removeItem('agentes_username');
+      sessionStorage.removeItem('agentes_auth_token');
+      sessionStorage.removeItem('agentes_user_id');
+      sessionStorage.removeItem('agentes_username');
       // Não redireciona automaticamente - deixa o ProtectedRoute gerenciar
     }
     return Promise.reject(error);
