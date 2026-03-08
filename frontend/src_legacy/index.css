@@ -1,0 +1,89 @@
+:root {
+  /* Light theme colors */
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-secondary: #f3f4f6;
+  --bg-card: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-lg: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --bg-primary: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  --bg-secondary: #111827;
+  --bg-card: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --border-color: #374151;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-lg: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Garante que legendas em fullscreen sempre apareçam */
+body > .subtitle-overlay.subtitle-fullscreen,
+body > [data-fullscreen="true"] {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Override theme variables to match proposal (placed at file end to take precedence) */
+:root {
+  --bg-primary: linear-gradient(180deg, #f5f7fa 0%, #e9eef6 100%);
+  --bg-secondary: #f5f7fa;
+  --bg-card: #ffffff;
+  --text-primary: #0b1220;
+  --text-secondary: #5b6b7a;
+  --text-muted: #8b96a3;
+  --border-color: #e6e9ef;
+  --shadow: rgba(2,6,23,0.06);
+  --shadow-lg: rgba(2,6,23,0.12);
+}
+
+[data-theme="dark"] {
+  --bg-primary: linear-gradient(180deg, #0f1720 0%, #071226 100%);
+  --bg-secondary: #0b1220;
+  --bg-card: #0f1728;
+  --text-primary: #e6eef8;
+  --text-secondary: #94a3b8;
+  --text-muted: #9aa6b5;
+  --border-color: #15202b;
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-lg: rgba(0, 0, 0, 0.65);
+}

@@ -1,0 +1,501 @@
+/* =========================================
+   REAL DYNAMIC CONTRAST (LIGHT / DARK)
+   ========================================= */
+
+body.dark,
+.preview-container.dark {
+  --bg-body: #020617;
+  --bg-sidebar: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #94a3b8;
+  --text-title: #f8fafc;
+  --text-muted: #cbd5e1;
+  /* Lighter than #64748b */
+  --border-color: #334155;
+  --bg-tooltip: #0f172a;
+  --text-tooltip: #f8fafc;
+  --border-tooltip: #1e293b;
+  color-scheme: dark;
+}
+
+body.light,
+.preview-container.light {
+  --bg-body: #f8fafc;
+  --bg-sidebar: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #334155;
+  --text-title: #0f172a;
+  --text-muted: #334155;
+  /* Darker than #94a3b8 */
+  --border-color: #cbd5e1;
+  /* Increased contrast from #e2e8f0 */
+  --bg-tooltip: #ffffff;
+  --text-tooltip: #0f172a;
+  --border-tooltip: #cbd5e1;
+  color-scheme: light;
+}
+
+
+/* =========================================
+   THE 6 VISUAL PERSONALITIES (V4.5 RADICAL)
+   ========================================= */
+
+/* 1. MODERN GLASS (Futuristic / Tech) */
+body.layout-glass,
+.preview-container.layout-glass {
+  --radius-theme: 32px;
+  --font-main: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --glass-blur: 24px;
+  --glass-opacity: 0.75;
+  --shadow-theme: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 20px -5px var(--primary-color);
+  --theme-padding: 1.75rem;
+}
+
+body.layout-glass .bg-theme-card,
+.preview-container.layout-glass .bg-theme-card {
+  background: color-mix(in srgb, var(--bg-card), transparent calc(100% * (1 - var(--glass-opacity, 0.7))));
+  backdrop-filter: blur(var(--glass-blur, 12px)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px)) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.layout-glass aside,
+.layout-glass header,
+.preview-container.layout-glass aside,
+.preview-container.layout-glass header {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* 2. SOLID CORPORATE (Secure / Institutional) */
+body.layout-corporate,
+.preview-container.layout-corporate {
+  --radius-theme: 8px;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Inter', sans-serif;
+  --shadow-theme: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --theme-gap: 1.25rem;
+  --theme-padding: 2rem;
+}
+
+body.layout-corporate .bg-theme-card,
+.preview-container.layout-corporate .bg-theme-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+/* 3. MINIMALIST CLEAN (Brutalism Light) */
+body.layout-minimal,
+.preview-container.layout-minimal {
+  --radius-theme: 0px;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Inter', sans-serif;
+  --theme-gap: 2.5rem;
+  --theme-padding: 3rem;
+  --shadow-theme: none;
+  --border-color: #000;
+}
+
+body.dark.layout-minimal,
+.preview-container.dark.layout-minimal {
+  --border-color: #333;
+}
+
+body.layout-minimal .bg-theme-card,
+.preview-container.layout-minimal .bg-theme-card {
+  border: 1px solid var(--border-color);
+  background: transparent;
+}
+
+/* 4. TECHNICAL ANALYTICS (Control Room / Terminal) */
+body.layout-technical,
+.preview-container.layout-technical {
+  --radius-theme: 0px;
+  --font-main: 'JetBrains Mono', monospace;
+  --font-heading: 'JetBrains Mono', monospace;
+  --theme-padding: 0.75rem;
+  --theme-gap: 1px;
+}
+
+body.dark.layout-technical,
+.preview-container.dark.layout-technical {
+  --bg-body: #000000;
+  --bg-sidebar: #050505;
+  --bg-card: #080808;
+  --border-color: var(--primary-color);
+  --theme-title: #ffffff;
+  --theme-main: #e2e8f0;
+  --theme-muted: #94a3b8;
+  --theme-body: #000000;
+  --theme-card: #080808;
+}
+
+body.light.layout-technical,
+.preview-container.light.layout-technical {
+  --bg-body: #f8fafc;
+  --bg-sidebar: #f1f5f9;
+  --bg-card: #ffffff;
+  --border-color: var(--primary-color);
+  --theme-title: #0f172a;
+  --theme-main: #1e293b;
+  --theme-muted: #64748b;
+  --theme-body: #f8fafc;
+  --theme-card: #ffffff;
+}
+
+body.layout-technical .bg-theme-card,
+.preview-container.layout-technical .bg-theme-card {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  position: relative;
+  overflow: hidden;
+  color: var(--theme-main);
+}
+
+/* 5. PRESTIGE EDITORIAL (Executive / Premium) */
+body.layout-prestige {
+  --radius-theme: 24px;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Sentient', serif;
+  --theme-padding: 2.5rem;
+  --theme-gap: 2rem;
+  --glass-blur: 20px;
+  --glass-opacity: 0.4;
+}
+
+body.light.layout-prestige {
+  --bg-body: #fdfdfc;
+  --bg-sidebar: #f7f7f5;
+  --bg-card: #ffffff;
+  --text-main: #1a1a1a;
+  --text-title: #000000;
+  --border-color: #e5e5e2;
+  color-scheme: light;
+}
+
+body.dark.layout-prestige,
+.preview-container.dark.layout-prestige {
+  --bg-body: #0a0a09;
+  --bg-sidebar: #141413;
+  --bg-card: #1c1c1b;
+  --theme-main: #e5e5e0;
+  --theme-title: #ffffff;
+  --theme-muted: #8c8c87;
+  --theme-body: #0a0a09;
+  --theme-card: #1c1c1b;
+  --border-color: #2a2a29;
+  color-scheme: dark;
+}
+
+body.layout-prestige .bg-theme-card {
+  background: color-mix(in srgb, var(--bg-card), transparent calc(100% * (1 - var(--glass-opacity))));
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--border-color), transparent 80%);
+}
+
+/* 6. DEEP ATMOSPHERIC (Elevation Levels) */
+body.layout-atmospheric {
+  --radius-theme: 32px;
+  --font-main: 'Outfit', sans-serif;
+  --font-heading: 'Satoshi', sans-serif;
+  --theme-padding: 3rem;
+  --theme-gap: 2.5rem;
+  --glass-blur: 40px;
+  --glass-opacity: 0.3;
+}
+
+body.dark.layout-atmospheric,
+.preview-container.dark.layout-atmospheric {
+  --bg-body: #02040a;
+  --bg-sidebar: #05070f;
+  --bg-card: #0a0c16;
+  --theme-title: #ffffff;
+  --theme-main: #cbd5e1;
+  --theme-muted: #64748b;
+  --theme-body: #02040a;
+  --theme-card: #0a0c16;
+  --shadow-intensity: 0.3;
+  color-scheme: dark;
+}
+
+body.light.layout-atmospheric {
+  --bg-body: #f0f4f8;
+  --bg-sidebar: #e2e8f0;
+  --bg-card: #ffffff;
+  --text-title: #0f172a;
+  --text-main: #334155;
+  --shadow-intensity: 0.1;
+  color-scheme: light;
+}
+
+body.layout-atmospheric .bg-theme-card {
+  background: color-mix(in srgb, var(--bg-card), transparent calc(100% * (1 - var(--glass-opacity))));
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid color-mix(in srgb, var(--border-color), transparent 85%);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, var(--shadow-intensity));
+}
+
+/* 7. NEW MASTER THEMES (V7.0 PREMIUM) */
+/* 7.1 NEON CIRCUIT (Cyberpunk/Hacker) */
+body.dark.layout-neon_circuit,
+.preview-container.dark.layout-neon_circuit {
+  --bg-body: #050510;
+  --bg-sidebar: #0a0a1a;
+  --bg-card: #0d0d26;
+  --text-title: #ffffff;
+  --text-main: #a8b0d3;
+  --text-muted: #64748b;
+  --theme-body: #050510;
+  --theme-card: #0d0d26;
+  --border-color: color-mix(in srgb, var(--primary-color), transparent 70%);
+}
+
+body.light.layout-neon_circuit,
+.preview-container.light.layout-neon_circuit {
+  --bg-body: #f8fafc;
+  --bg-sidebar: #e2e8f0;
+  --bg-card: #ffffff;
+  --text-title: #0f172a;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --theme-body: #f8fafc;
+  --theme-card: #ffffff;
+  --border-color: color-mix(in srgb, var(--primary-color), transparent 50%);
+}
+
+/* 7.2 ZEN PARCHMENT (Calm/Analog) */
+body.dark.layout-zen_parchment,
+.preview-container.dark.layout-zen_parchment {
+  --bg-body: #1c1914;
+  --bg-sidebar: #26221c;
+  --bg-card: #2e2a24;
+  --text-title: #f2e9d8;
+  --text-main: #d4c8b6;
+  --text-muted: #a3998a;
+  --theme-body: #1c1914;
+  --theme-card: #2e2a24;
+  --border-color: #403a31;
+}
+
+body.light.layout-zen_parchment,
+.preview-container.light.layout-zen_parchment {
+  --bg-body: #fdfbf7;
+  --bg-sidebar: #f5f0e6;
+  --bg-card: #ffffff;
+  --text-title: #2b261f;
+  --text-main: #4d463a;
+  --text-muted: #82786a;
+  --theme-body: #fdfbf7;
+  --theme-card: #ffffff;
+  --border-color: #e8dfce;
+}
+
+/* 7.3 FINANCE PRO (Bloomberg/Terminal) */
+body.dark.layout-finance_pro,
+.preview-container.dark.layout-finance_pro {
+  --bg-body: #060709;
+  --bg-sidebar: #0b0d12;
+  --bg-card: #10131a;
+  --text-title: #ffffff;
+  --text-main: #b4bccc;
+  --text-muted: #4a5468;
+  --theme-body: #060709;
+  --theme-card: #10131a;
+  --border-color: #1a202c;
+}
+
+body.light.layout-finance_pro,
+.preview-container.light.layout-finance_pro {
+  --bg-body: #f4f5f7;
+  --bg-sidebar: #ebedf2;
+  --bg-card: #ffffff;
+  --text-title: #111827;
+  --text-main: #4b5563;
+  --text-muted: #9ca3af;
+  --theme-body: #f4f5f7;
+  --theme-card: #ffffff;
+  --border-color: #d1d5db;
+}
+
+/* 7.4 GAMER ELITE (High contrast) */
+body.dark.layout-gamer_elite,
+.preview-container.dark.layout-gamer_elite {
+  --bg-body: #09090b;
+  --bg-sidebar: #121214;
+  --bg-card: #18181b;
+  --text-title: #ffffff;
+  --text-main: #a1a1aa;
+  --text-muted: #52525b;
+  --theme-body: #09090b;
+  --theme-card: #18181b;
+  --border-color: #27272a;
+}
+
+body.light.layout-gamer_elite,
+.preview-container.light.layout-gamer_elite {
+  --bg-body: #fdfdfd;
+  --bg-sidebar: #f4f4f5;
+  --bg-card: #ffffff;
+  --text-title: #09090b;
+  --text-main: #52525b;
+  --text-muted: #a1a1aa;
+  --theme-body: #fdfdfd;
+  --theme-card: #ffffff;
+  --border-color: #e4e4e7;
+}
+
+/* 7.5 AI NEURAL FLUX (Futuristic Purple/Blue) */
+body.dark.layout-ai_neural,
+.preview-container.dark.layout-ai_neural {
+  --bg-body: #02000a;
+  --bg-sidebar: #060214;
+  --bg-card: #0b0424;
+  --text-title: #ffffff;
+  --text-main: #c4b5fd;
+  --text-muted: #7c3aed;
+  --theme-body: #02000a;
+  --theme-card: #0b0424;
+  --border-color: #4c1d95;
+}
+
+body.light.layout-ai_neural,
+.preview-container.light.layout-ai_neural {
+  --bg-body: #faf5ff;
+  --bg-sidebar: #f3e8ff;
+  --bg-card: #ffffff;
+  --text-title: #3b0764;
+  --text-main: #6b21a8;
+  --text-muted: #a855f7;
+  --theme-body: #faf5ff;
+  --theme-card: #ffffff;
+  --border-color: #d8b4fe;
+}
+
+/* 7.6 EDITORIAL LUXURY (Magazine/Classic) */
+body.dark.layout-editorial,
+.preview-container.dark.layout-editorial {
+  --bg-body: #111111;
+  --bg-sidebar: #1a1a1a;
+  --bg-card: #222222;
+  --text-title: #ffffff;
+  --text-main: #cccccc;
+  --text-muted: #888888;
+  --theme-body: #111111;
+  --theme-card: #222222;
+  --border-color: #333333;
+}
+
+body.light.layout-editorial,
+.preview-container.light.layout-editorial {
+  --bg-body: #fafafa;
+  --bg-sidebar: #f0f0f0;
+  --bg-card: #ffffff;
+  --text-title: #111111;
+  --text-main: #444444;
+  --text-muted: #888888;
+  --theme-body: #fafafa;
+  --theme-card: #ffffff;
+  --border-color: #e0e0e0;
+}
+
+/* 7.7 TERMINAL RETRO (Phosphor Hacker) */
+body.dark.layout-terminal,
+.preview-container.dark.layout-terminal {
+  --bg-body: #000000;
+  --bg-sidebar: #020402;
+  --bg-card: #040804;
+  --text-title: var(--primary-color);
+  --text-main: color-mix(in srgb, var(--primary-color) 80%, white 20%);
+  --text-muted: color-mix(in srgb, var(--primary-color), transparent 60%);
+  --theme-body: #000000;
+  --theme-card: #040804;
+  --border-color: color-mix(in srgb, var(--primary-color), transparent 80%);
+}
+
+body.light.layout-terminal,
+.preview-container.light.layout-terminal {
+  --bg-body: #f4fbf4;
+  --bg-sidebar: #e5f5e5;
+  --bg-card: #ffffff;
+  --text-title: var(--primary-color);
+  --text-main: color-mix(in srgb, var(--primary-color) 80%, black 20%);
+  --text-muted: color-mix(in srgb, var(--primary-color) 50%, black 50%);
+  --theme-body: #f4fbf4;
+  --theme-card: #ffffff;
+  --border-color: color-mix(in srgb, var(--primary-color), transparent 60%);
+}
+
+/* APPLICATION OF GLASS MODULES IN NEW THEMES */
+body.layout-neon_circuit .bg-theme-card,
+.preview-container.layout-neon_circuit .bg-theme-card,
+body.layout-zen_parchment .bg-theme-card,
+.preview-container.layout-zen_parchment .bg-theme-card,
+body.layout-finance_pro .bg-theme-card,
+.preview-container.layout-finance_pro .bg-theme-card,
+body.layout-gamer_elite .bg-theme-card,
+.preview-container.layout-gamer_elite .bg-theme-card,
+body.layout-ai_neural .bg-theme-card,
+.preview-container.layout-ai_neural .bg-theme-card,
+body.layout-editorial .bg-theme-card,
+.preview-container.layout-editorial .bg-theme-card,
+body.layout-terminal .bg-theme-card,
+.preview-container.layout-terminal .bg-theme-card {
+  background-color: color-mix(in srgb, var(--bg-card), transparent calc(100% * (1 - var(--glass-opacity, 1))));
+  border: var(--border-width, 1px) solid var(--border-color);
+  backdrop-filter: blur(var(--glass-blur, 0px)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 0px)) saturate(150%);
+  border-radius: var(--radius-theme);
+  padding: var(--theme-padding);
+}
+
+
+/* Fixed neutrals for selective components */
+.bg-fixed-sidebar {
+  background-color: #0f172a !important;
+}
+
+body.light .bg-fixed-sidebar {
+  background-color: #f1f5f9 !important;
+}
+
+.border-fixed-border {
+  border-color: #334155 !important;
+}
+
+body.light .border-fixed-border {
+  border-color: #cbd5e1 !important;
+}
+
+
+/* Layout Specific Refinements (V4.6) */
+.layout-mac .bg-theme-card,
+.layout-mac .bg-theme-sidebar {
+  backdrop-filter: blur(50px) saturate(180%);
+  background: color-mix(in srgb, var(--theme-sidebar, var(--bg-sidebar)), transparent 30%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.layout-mac .bg-theme-card {
+  background: color-mix(in srgb, var(--theme-card, var(--bg-card)), transparent 30%);
+}
+
+body.light.layout-mac .bg-theme-card,
+body.light.layout-mac .bg-theme-sidebar {
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.layout-cyberpunk {
+  --primary-color: #00ff41;
+}
+
+.layout-cyberpunk .bg-theme-card {
+  background: #000 !important;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color), inset 0 0 5px var(--primary-color);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 95% 100%, 0% 100%);
+}

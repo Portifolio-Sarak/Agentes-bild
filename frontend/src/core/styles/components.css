@@ -1,0 +1,153 @@
+/* Semantic compatibility utilities */
+.shadow-soft {
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-theme {
+  border-radius: var(--radius-theme);
+}
+
+
+/* 4. GLOBAL SCALE UTILITY CLASS REDEFINITION */
+.text-xs,
+.text-\[10px\],
+.text-\[9px\] {
+  font-size: calc(0.75rem * var(--font-size-factor)) !important;
+}
+
+.text-sm,
+.text-\[11px\],
+.text-\[12px\] {
+  font-size: calc(0.875rem * var(--font-size-factor)) !important;
+}
+
+.text-base {
+  font-size: calc(1rem * var(--font-size-factor)) !important;
+}
+
+.text-lg {
+  font-size: calc(1.125rem * var(--font-size-factor)) !important;
+}
+
+.text-xl {
+  font-size: calc(1.25rem * var(--font-size-factor)) !important;
+}
+
+.text-2xl {
+  font-size: calc(1.5rem * var(--font-size-factor)) !important;
+}
+
+.text-3xl {
+  font-size: calc(1.875rem * var(--font-size-factor)) !important;
+}
+
+.text-4xl {
+  font-size: calc(2.25rem * var(--font-size-factor)) !important;
+}
+
+.text-5xl {
+  font-size: calc(3rem * var(--font-size-factor)) !important;
+}
+
+/* Project-specific classes */
+.grid-theme {
+  display: grid;
+  gap: var(--theme-gap);
+}
+
+.uppercase.tracking-widest {
+  letter-spacing: calc(0.1em * var(--font-size-factor));
+}
+
+.bg-theme-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-theme);
+  padding: var(--theme-padding);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, calc(var(--shadow-intensity) * 2));
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.light .bg-theme-card {
+  border-color: var(--border-tooltip);
+  /* Use tooltip border for more structure in light mode */
+}
+
+.bg-theme-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--glass-glare);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bg-theme-card:hover {
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, calc(var(--shadow-intensity) * 3)), var(--primary-glow);
+  transform: translateY(-2px);
+}
+
+.bg-theme-card:hover::before {
+  opacity: 0.5;
+}
+
+/* TABLE SYSTEM (DYNAMIC ZEBRA STRIPING) */
+table tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--primary-color), transparent 95%);
+}
+
+.dark table tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--primary-color), transparent 93%);
+}
+
+table tbody tr:hover {
+  background-color: color-mix(in srgb, var(--primary-color), transparent 85%) !important;
+}
+
+/* High Visibility Customized Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--primary-color) !important;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--primary-color), white 10%) !important;
+}
+
+/* Force native scroll if class is missing but overflow is present */
+[style*="overflow: auto"],
+[style*="overflow: scroll"],
+.overflow-auto,
+.overflow-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+/* Tailwind v4 tokens are handled by CSS variables above */
+
+
+body.is-resizing,
+body.is-resizing *,
+body.is-resizing aside,
+body.is-resizing main {
+  transition: none !important;
+  cursor: col-resize !important;
+  user-select: none !important;
+}

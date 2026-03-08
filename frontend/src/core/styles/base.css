@@ -1,0 +1,197 @@
+:root {
+  /* 1. FUNDAMENTAL COLOR TOKENS (SEMANTIC) */
+  --bg-body: #020617;
+  --bg-sidebar: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+
+  --text-main: #94a3b8;
+  --text-title: #f8fafc;
+  --text-muted: #64748b;
+  --text-accent: var(--primary-color);
+
+  --border-color: #334155;
+  --primary-color: #3b82f6;
+
+  /* 1.1 DERIVED TOKENS (ACCENT INTEGRATION) */
+  --primary-tint-5: color-mix(in srgb, var(--primary-color), transparent 95%);
+  --primary-tint-10: color-mix(in srgb, var(--primary-color), transparent 90%);
+  --primary-tint-20: color-mix(in srgb, var(--primary-color), transparent 80%);
+  --primary-glow-subtle: 0 0 15px -5px color-mix(in srgb, var(--primary-color), transparent 50%);
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* 2. PERSONALITY TOKENS (PREMIUM FOUNDATION) */
+  --radius-theme: 12px;
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --theme-padding: 1.5rem;
+  --theme-border-width: 1px;
+  --sidebar-width: 220px;
+
+  /* Elevation and Depth */
+  --shadow-theme: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --elevation-1: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --elevation-2: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --elevation-glow: var(--primary-glow-subtle);
+
+  /* Special Effects */
+  --glass-blur: 0px;
+  --glass-opacity: 1;
+  --transition-speed: 0.3s;
+  --letter-spacing: -0.01em;
+
+  /* 3. LUXURY TOKENS (V5.1 PREMIUM) */
+  --primary-glow: 0 0 25px -5px color-mix(in srgb, var(--primary-color), transparent 40%);
+  --shadow-intensity: 0.12;
+  --glass-glare: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  --border-width: 1px;
+  --font-weight-heading: 700;
+  --letter-spacing-heading: -0.02em;
+  --text-transform-heading: none;
+  /* uppercase | none */
+  --font-weight-main: 400;
+  --letter-spacing-main: 0;
+  --theme-gap: 1.5rem;
+  --card-hover-scale: 1.02;
+  --font-size-factor: 1;
+  /* p1: 0.8, p: 0.9, m: 1.0, g: 1.2, g1: 1.4 */
+}
+
+body,
+.preview-container {
+  /* MAPPING FOR TAILWIND v4 (DYNAMIC IN SCOPE) */
+  --color-theme-body: var(--theme-body, var(--bg-body));
+  --color-theme-sidebar: var(--theme-sidebar, var(--bg-sidebar));
+  --color-theme-card: var(--theme-card, var(--bg-card));
+  --color-theme-title: var(--theme-title, var(--text-title));
+  --color-theme-main: var(--text-main);
+  --color-theme-muted: var(--text-muted);
+  --color-theme-border: var(--border-color);
+  --color-theme-primary: var(--primary-color);
+}
+
+/* --- GOOGLE TRANSLATE SUPPRESSION --- */
+body {
+  top: 0px !important;
+}
+
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#google_translate_element,
+.goog-te-gadget-icon,
+.goog-te-spinner-pos {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.goog-tooltip {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  font-size: 0px !important;
+  color: transparent !important;
+}
+
+.goog-te-gadget span {
+  display: none !important;
+}
+
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+
+/* =========================================
+   GLOBAL APPLICATION SYSTEM
+   ========================================= */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  /* Scroll will be controlled by internal components */
+}
+
+body {
+  background: var(--bg-body);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: var(--font-main);
+  font-weight: var(--font-weight-main);
+  letter-spacing: var(--letter-spacing-main);
+  font-size: calc(0.875rem * var(--font-size-factor));
+  line-height: 1.5;
+  transition: background var(--transition-speed), color var(--transition-speed);
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading) !important;
+  color: var(--text-title);
+  font-weight: var(--font-weight-heading, 700);
+  letter-spacing: var(--letter-spacing-heading);
+  text-transform: var(--text-transform-heading);
+}
+
+h1 {
+  font-size: calc(2.25rem * var(--font-size-factor));
+}
+
+h2 {
+  font-size: calc(1.875rem * var(--font-size-factor));
+}
+
+h3 {
+  font-size: calc(1.5rem * var(--font-size-factor));
+}
+
+h4 {
+  font-size: calc(1.25rem * var(--font-size-factor));
+}
+
+
+/* Google Translate SUPPRESSION (V2) */
+body {
+  top: 0px !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-te-gadget,
+.goog-te-gadget-simple,
+.goog-te-combo,
+#google_translate_element,
+.goog-tooltip,
+#goog-gt-tt,
+.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}

@@ -1,0 +1,166 @@
+/* =========================================
+   SISTEMA UNIVERSAL DE TEXTURAS (V5.1)
+   ========================================= */
+
+.texture-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important;
+  background-attachment: fixed !important;
+}
+
+.dark .texture-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+}
+
+.texture-dots {
+  background-image: radial-gradient(var(--border-color) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+}
+
+.texture-noise {
+  position: relative;
+}
+
+.texture-noise::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E") !important;
+  background-repeat: repeat !important;
+  opacity: 0.15 !important;
+}
+
+.texture-mesh {
+  background-image:
+    radial-gradient(at 0% 0%, color-mix(in srgb, var(--primary-color), transparent 85%) 0%, transparent 60%),
+    radial-gradient(at 100% 0%, color-mix(in srgb, var(--primary-color), transparent 85%) 0%, transparent 60%),
+    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 70%) !important;
+  background-size: 100% 100% !important;
+  background-attachment: fixed !important;
+}
+
+.texture-waves {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20' viewBox='0 0 100 20'%3E%3Cpath d='M21.1,5.7c0,5.9-4.8,10.6-10.6,10.6S0,11.5,0,5.7c0-5.9,4.8-10.6,10.6-10.6S21.1-0.2,21.1,5.7z M71.1,5.7c0,5.9-4.8,10.6-10.6,10.6S50,11.5,50,5.7c0-5.9,4.8-10.6,10.6-10.6S71.1-0.2,71.1,5.7z' fill='var(--border-color)' fill-opacity='0.1'/%3E%3C/svg%3E") !important;
+  background-size: 100px 20px !important;
+}
+
+.texture-squares {
+  background-image:
+    linear-gradient(45deg, var(--border-color) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--border-color) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--border-color) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--border-color) 75%) !important;
+  background-size: 40px 40px !important;
+  background-position: 0 0, 0 20px, 20px -20px, -20px 0px !important;
+}
+
+.texture-stripes {
+  background-image: linear-gradient(45deg, var(--primary-color) 12.5%, transparent 12.5%, transparent 50%, var(--primary-color) 50%, var(--primary-color) 62.5%, transparent 62.5%, transparent 100%) !important;
+  background-size: 56.57px 56.57px !important;
+  opacity: 0.05 !important;
+}
+
+.texture-topo {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M0 10 Q 25 35 50 10 T 100 10 M0 30 Q 25 55 50 30 T 100 30 M0 50 Q 25 75 50 50 T 100 50 M0 70 Q 25 95 50 70 T 100 70 M0 90 Q 25 115 50 90 T 100 90' fill='none' stroke='var(--primary-color)' stroke-width='0.5' opacity='0.2'/%3E%3C/svg%3E") !important;
+  background-size: 200px 200px !important;
+}
+
+.texture-diamond {
+  background-image: conic-gradient(from 0deg at 50% 50%, var(--border-color) 0%, transparent 25%, var(--border-color) 50%, transparent 75%, var(--border-color) 100%) !important;
+  background-size: 20px 20px !important;
+  opacity: 0.05 !important;
+}
+
+.texture-prestige {
+  background-image:
+    linear-gradient(217deg, color-mix(in srgb, var(--primary-color), transparent 88%), rgba(255, 255, 255, 0) 70.71%),
+    linear-gradient(127deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, 0) 70.71%),
+    linear-gradient(336deg, rgba(139, 92, 246, .08), rgba(139, 92, 246, 0) 70.71%) !important;
+  background-attachment: fixed !important;
+}
+
+.texture-carbon {
+  background:
+    linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424) !important;
+  background-size: 20px 20px !important;
+  background-color: #131313 !important;
+}
+
+.texture-brushed {
+  background:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, transparent 75%, transparent) !important;
+  background-size: 4px 4px !important;
+  background-color: var(--bg-body) !important;
+  position: relative;
+}
+
+.texture-brushed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+  pointer-events: none;
+}
+
+.texture-frosted {
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background-color: color-mix(in srgb, var(--bg-body), transparent 40%) !important;
+}
+
+.texture-circuit {
+  background-color: #050505 !important;
+  background-image:
+    radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0),
+    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 0),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 0) !important;
+  background-size: 20px 20px, 20px 20px, 20px 20px !important;
+}
+
+.texture-paper {
+  background-color: #f4f1ea !important;
+  background-image:
+    url("https://www.transparenttextures.com/patterns/parchment.png"),
+    radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.02) 0%, transparent 50%) !important;
+  filter: sepia(0.2) contrast(1.1) !important;
+}
+
+body.dark .texture-paper {
+  background-color: #1a1917 !important;
+  filter: sepia(0.5) contrast(0.9) brightness(0.8) !important;
+}
+
+.texture-scanlines {
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)) !important;
+  background-size: 100% 4px, 3px 100% !important;
+}
+
+.texture-hexagon {
+  background-color: #0a0a0a !important;
+  background-image:
+    url("https://www.transparenttextures.com/patterns/hexellence.png"),
+    radial-gradient(circle at center, var(--primary-tint-10) 0%, transparent 70%) !important;
+  background-size: 40px 40px, 100% 100% !important;
+}
+
+[class*="texture-"] {
+  background-blend-mode: normal !important;
+}
+

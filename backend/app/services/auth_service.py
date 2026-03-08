@@ -100,14 +100,16 @@ def verify_token(token: str) -> Optional[dict]:
         return None
 
 
+from sqlalchemy import func
+
 def get_user_by_email(db: Session, email: str) -> Optional[User]:
-    """Busca usuário por email"""
-    return db.query(User).filter(User.email == email).first()
+    """Busca usuário por email (case-insensitive)"""
+    return db.query(User).filter(func.lower(User.email) == func.lower(email)).first()
 
 
 def get_user_by_username(db: Session, username: str) -> Optional[User]:
-    """Busca usuário por username"""
-    return db.query(User).filter(User.username == username).first()
+    """Busca usuário por username (case-insensitive)"""
+    return db.query(User).filter(func.lower(User.username) == func.lower(username)).first()
 
 
 def get_user_by_id(db: Session, user_id: str) -> Optional[User]:
@@ -148,9 +150,21 @@ def create_user(
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     """
-    Autentica usuário por email e senha usando hash.
+    Autentica usuário por email ou username e senha usando hash.
+    O parâmetro 'email' aceita tanto o email quanto o username.
     """
+    # Tenta buscar por email primeiro (case-insensitive)
     user = get_user_by_email(db, email)
+    
+    # Se não encontrar por email, tenta por username exato
+    if not user:
+        user = get_user_by_username(db, email)
+        
+    # Se ainda não encontrar, tenta por prefixo do username (ex: 'Igor' -> 'IgorSarak')
+    # SOMENTE se o termo tiver pelo menos 3 caracteres para evitar matches muito genéricos
+    if not user and len(email) >= 3:
+        user = db.query(User).filter(func.lower(User.username).like(f"{email.lower()}%")).first()
+        
     if not user:
         return None
     if not user.is_active:

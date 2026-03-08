@@ -1,0 +1,20 @@
+export const TEXTURE_LIBRARY = [
+    { id: 'none', name: 'None', className: 'texture-none', description: 'Smooth and minimalist background.' },
+    { id: 'grid', name: 'Grid Tech', className: 'texture-grid', description: 'Technical engineering grid.' },
+    { id: 'dots', name: 'Dots Clean', className: 'texture-dots', description: 'Subtle and modern dot pattern.' },
+    { id: 'noise', name: 'Grain Noise', className: 'texture-noise', description: 'Analog noise for depth.' },
+    { id: 'mesh', name: 'Mesh Gradient', className: 'texture-mesh', description: 'Fluid and smooth gradients.' },
+    { id: 'waves', name: 'Waves Soft', className: 'texture-waves', description: 'Organic and relaxing waves.' },
+    { id: 'squares', name: 'Geometry Squares', className: 'texture-squares', description: 'Floating squares pattern.' },
+    { id: 'stripes', name: 'Diagonal Stripes', className: 'texture-stripes', description: 'Dynamic diagonal lines.' },
+    { id: 'topo', name: 'Topography', className: 'texture-topo', description: 'Geographic contour curves.' },
+    { id: 'diamond', name: 'Diamond Pattern', className: 'texture-diamond', description: 'Classic diamond pattern.' },
+    { id: 'prestige', name: 'Prestige Pattern', className: 'texture-prestige', description: 'High-luxury editorial silk.' },
+    { id: 'carbon', name: 'Carbon Fiber', className: 'texture-carbon', description: 'Industrial carbon fiber weave.' },
+    { id: 'brushed', name: 'Brushed Metal', className: 'texture-brushed', description: 'Premium brushed metal effect.' },
+    { id: 'frosted', name: 'Frosted Glass', className: 'texture-frosted', description: 'Dense sandblasted glass effect.' },
+    { id: 'circuit', name: 'Circuit Tech', className: 'texture-circuit', description: 'Futuristic electronic traces.' },
+    { id: 'paper', name: 'Vintage Paper', className: 'texture-paper', description: 'Classic parchment paper texture.' },
+    { id: 'scanlines', name: 'CRT Scanlines', className: 'texture-scanlines', description: 'Retro-terminal scanline effect.' },
+    { id: 'hexagon', name: 'Hex Shield', className: 'texture-hexagon', description: 'Technical and modern honeycomb pattern.' }
+];
